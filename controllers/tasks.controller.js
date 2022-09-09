@@ -76,4 +76,23 @@ const updateTask = async (req, res) => {
   }
 };
 
-module.exports = { getAllTasks, getGivenStatus, createTask, updateTask };
+const deleteTask = async (req, res) => {
+  try {
+    const { task } = req;
+    await task.update({ status: "cancelled" });
+
+    res.status(204).json({
+      status: "success",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
+  getAllTasks,
+  getGivenStatus,
+  createTask,
+  updateTask,
+  deleteTask,
+};
