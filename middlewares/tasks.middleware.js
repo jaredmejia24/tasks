@@ -45,7 +45,7 @@ const isTaskActive = async (req, res, next) => {
     if (task.status !== "active") {
       return res.status(400).json({
         status: "error",
-        message: "status must be active to patch finishDate",
+        message: "status must be active",
       });
     }
 
@@ -54,5 +54,6 @@ const isTaskActive = async (req, res, next) => {
     console.log(error);
   }
 };
+
 
 module.exports = { statusExist, taskExist, isTaskActive };

@@ -6,6 +6,7 @@ const {
   createTask,
   getGivenStatus,
   updateTask,
+  deleteTask
 } = require("../controllers/tasks.controller");
 
 // Middlewares
@@ -37,6 +38,6 @@ tasksRouter.patch(
   updateTask
 );
 
-tasksRouter.delete("/:id", taskExist);
+tasksRouter.delete("/:id", taskExist, isTaskActive, deleteTask);
 
 module.exports = { tasksRouter };
