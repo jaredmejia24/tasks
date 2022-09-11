@@ -1,3 +1,6 @@
+//import bcrypt
+const bcrypt = require("bcryptjs");
+
 const { Task } = require("../Models/tasks.model");
 const { User } = require("../Models/users.model");
 
@@ -5,6 +8,7 @@ const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll({
       where: { status: "active" },
+      attributes: { exclude: "password" },
       include: Task,
     });
 
@@ -23,7 +27,18 @@ const createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const newUser = await User.create({ name, email, password });
+    // Encrypt the password
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    // Remove password from response
+    newUser.password = undefined;
 
     res.status(201).json({
       status: "success",
@@ -42,6 +57,8 @@ const updateUser = async (req, res) => {
     const { name, email } = req.body;
 
     const updatedUser = await user.update({ name, email });
+
+    user.password = undefined;
 
     res.status(200).json({
       status: "success",
