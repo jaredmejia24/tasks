@@ -3,7 +3,9 @@ const { User } = require("../Models/users.model");
 
 const getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.findAll({ include: User });
+    const tasks = await Task.findAll({
+      include: { model: User, attributes: { exclude: "password" } },
+    });
 
     res.status(200).json({
       status: "success",
@@ -20,7 +22,10 @@ const getGivenStatus = async (req, res) => {
   try {
     const { status } = req.params;
 
-    const tasks = await Task.findAll({ where: { status }, include: User });
+    const tasks = await Task.findAll({
+      where: { status },
+      include: { model: User, attributes: { exclude: "password" } },
+    });
 
     res.status(200).json({
       status: "success",
